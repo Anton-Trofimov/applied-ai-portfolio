@@ -52,17 +52,28 @@ The project demonstrates a repeatable approach: define bounded hypotheses and ev
 
 ### 1.2. Governed Agent Runtime
 
-**Status:** Work in progress
+**Status:** Public baseline published / ongoing validation<br>
 
-**Public materials:** Not yet published
+**Repository:** [governed-agent-runtime](https://github.com/Anton-Trofimov/governed-agent-runtime)<br>
+
+**Results and decisions:** [RESULTS-AND-DECISIONS.md](https://github.com/Anton-Trofimov/governed-agent-runtime/blob/main/RESULTS-AND-DECISIONS.md)<br>
 
 #### Summary
 
-A bounded agent for incident-response scenarios operating inside a controlled runtime rather than allowing the language model to act as the system control plane.
+A bounded agentic system for on-call incident-response scenarios in which the LLM interprets evidence and proposes the next step, while a deterministic runtime remains the operational control plane for policy, authorization, tools, confirmation, state transitions, and execution.
 
-The current work focuses on validating the product scope and scenario lifecycle, evidence requirements, policy gates, runtime decisions, confirmation, tool authorization, state transitions, execution traces, and reproducible evaluation.
+The project is developed through an SDD development harness that connects product hypotheses and human decisions to specifications, contracts, bounded AI-assisted implementation, tests, reproducible evaluation, published evidence, semantic review, and project-level decisions.
 
-Public materials will be added after the initial product hypothesis, runtime boundaries, reference environment, and evaluation vertical are sufficiently stable.
+The project explores where bounded agent behavior provides useful autonomy compared with deterministic workflows while keeping operational authority, evaluation, and failure handling explicit.
+
+The current public baseline includes a deterministic governed runtime path and Exp 18.1A: five single-step operational scenarios evaluated with Qwen `qwen3.8:27b` across 15 measured attempts.
+
+- **Model quality:** `12 / 15 PASS`
+- **Runtime control (containment):** `15 / 15 PASS`
+
+The evaluation exposed an important boundary: schema-valid and runtime-contained model output can still contain unsupported semantic details. This led to separate evaluation of model quality and runtime containment rather than treating agent behavior as a single PASS / FAIL result.
+
+The published repository already contains the measured baseline, source evidence, evaluation artifacts, and resulting project decisions. Subsequent stages extend the validation toward bounded multi-step behavior, controlled tool interaction, failure handling, latency and token economics, model comparison, and measurable user and business outcomes.
 
 ## 2. Publications
 
