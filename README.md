@@ -75,6 +75,16 @@ The evaluation exposed an important boundary: schema-valid and runtime-contained
 
 The published repository already contains the measured baseline, source evidence, evaluation artifacts, and resulting project decisions. Subsequent stages extend the validation toward bounded multi-step behavior, controlled tool interaction, failure handling, latency and token economics, model comparison, and measurable user and business outcomes.
 
+## Universal Agent Platforms
+
+Hands-on exploration of universal-agent runtime patterns using **OpenClaw** and **GigaAgent**, complementing the custom runtime work in Governed Agent Runtime.
+
+- **OpenClaw:** configured and adapted an agent workspace with persistent user context and memory conventions, specialized subagents, routing/delegation, Telegram as a user channel, and explicit allowlists and trust boundaries.
+- **GigaAgent 0.1.9:** ran a local stack with Ollama (`qwen3.8:27b`, `qwen3-embedding:0.6b`) and exercised the execution path from model proposal through HITL and runtime control to a resource-bounded Docker sandbox and agent continuation.
+- Extended the capability surface through a minimal custom **MCP server**, validating tool discovery/schema, model tool selection, MCP execution, and result propagation back into the agent workflow.
+- Tested platform-managed persistent memory through **Mem0 + Qdrant**, including automatic background fact extraction, embedding, semantic retrieval, and cross-chat memory injection.
+- Investigated practical runtime and integration failure modes across sandbox lifecycle, MCP transport/CORS, realtime UI streaming, OpenAI-compatible embedding APIs, and local GPU resource pressure.
+
 ## 2. Publications
 
 ### 2.1. Why RAG Is More Than “Adding Search”
