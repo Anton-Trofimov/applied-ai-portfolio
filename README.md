@@ -1,114 +1,61 @@
 # Applied AI Systems & Product Delivery
 
-Applied AI portfolio focused on product discovery, specification-driven and agent-assisted delivery, reproducible evaluation harnesses, and governed AI systems.
+**Anton Trofimov** · Product Owner / Delivery Lead (AI / GenAI)
 
-**Anton Trofimov**<br>
-Product Owner / Delivery Lead (AI / GenAI)
+My background is in enterprise IT product and project delivery, including the development and evolution of enterprise platforms and services, master data solutions, complex integrations, and systems supporting production processes, operational accounting, and planning. I have managed projects with budgets up to RUB 240M and cross-functional teams of up to 30 people. My applied-AI work combines system design, implementation, quality evaluation, and architecture decisions.
 
-## Development Approach
+This portfolio presents **implemented systems, measured results, and supporting evidence**. The AI work is independently developed and validated in bounded environments; it is **not a claim of commercial AI production deployments**.
 
-Projects are organized as controlled product-delivery systems.
+## Selected work
 
-### Delivery cycle
+### 1. Governed Agent Runtime — controlled agent execution
 
-- Product problem and business context
-- Discovery and bounded hypothesis
-- Specifications and acceptance criteria
-- Agent-assisted implementation
-- Reproducible evaluation
-- Review and error analysis
-- Product or architecture decision
+**Problem.** An LLM can suggest a useful action, but it must not grant itself permission to execute it.
 
-The objective is to make AI development traceable, measurable, reviewable, and controlled within defined system boundaries.
+**System design.** An agent interprets evidence and proposes a next step for a synthetic incident-response service. A **deterministic runtime** controls what can happen next:
 
-## 1. Projects
+- **Structured contracts and state machine:** typed proposals, tool contracts, explicit workflow states and allowed state transitions.
+- **Execution governance:** controlled context, policy and authorization gates, action preconditions, human-in-the-loop (HITL) confirmation, and bounded tool calling.
+- **Traceability and evals:** execution traces, audit lineage, reproducible evaluations, and separate checks for model decision quality, runtime containment, and the provenance of semantic evaluation criteria.
 
-### 1.1. RAG Retrieval Trade-offs
+**Measured outcomes and boundaries**
 
-**Status:** Published<br>
-**Repository:** [rag-retrieval-tradeoffs](https://github.com/Anton-Trofimov/rag-retrieval-tradeoffs)<br>
-**Results and decisions:** [RESULTS-AND-DECISIONS.md](https://github.com/Anton-Trofimov/rag-retrieval-tradeoffs/blob/main/RESULTS-AND-DECISIONS.md)<br>
-**Related publication:** [Why RAG Is More Than “Adding Search”](https://habr.com/p/1040938/)
+- **Single-step baseline:** 5 scenarios, 15 measured attempts with Qwen `qwen3.8:27b`; **12/15 PASS** for model quality and **15/15 PASS** for runtime containment.
+- **Bounded multi-step execution:** six completed synthetic recovery trajectories from two operator requests and three paired seeds, with individually confirmed state-changing actions and runtime-verified rollback.
+- **Evaluation findings:** structurally valid, runtime-contained proposals can still contain unsupported reasoning. An explicit evaluation traceability gate separates source-backed criteria from unreviewed semantic assumptions.
+- **Operator experience:** a local interactive UI covers confirmation, refusal, expiry, and initial dialogue; live Ollama inference was exercised locally. The public [interactive demo](https://антонтрофимов.рф/gov-agent/) uses recorded behavior, **not live model inference**.
+- **Delivery approach:** specification-driven development (SDD), AI-assisted implementation, contracts, automated tests, CI, review, and retained decision/evidence records.
 
-**Evaluation scope:** 4 hypotheses, 14 evaluation cases, 55 annotated facts, and 956 run records across the evaluation matrix: 728 generation records (182 warm-ups and 546 measured runs) and 228 retrieval records (57 warm-ups and 171 measured runs). These are run records, not 956 independent evaluation cases.<br>
-**Reference stack:** Python 3.12, Ollama, Chroma, `qwen3-embedding:0.6b`, and `mistral:7b`.<br>
-**Outcome:** local operating decisions on RAG use, `top_k`, chunk size, and retrieval unit for the evaluated corpus, context-admission policy, models, and reference environment.
+**Scope:** results are specific to the evaluated scenarios. Production readiness, general reliability, and business impact have not been established.
 
-#### Summary
+**Evidence:** [Repository](https://github.com/Anton-Trofimov/governed-agent-runtime) · [Results and decisions](https://github.com/Anton-Trofimov/governed-agent-runtime/blob/main/RESULTS-AND-DECISIONS.md) · [Multi-step measured review](https://github.com/Anton-Trofimov/governed-agent-runtime/blob/main/reports/reviews/bc-008-measured-review.md) · [Interactive demo](https://антонтрофимов.рф/gov-agent/)
 
-A reproducible product and architecture evaluation examining how retrieval strategy affects evidence completeness, context size, citation behavior, input tokens, TTFT, E2E latency, and context-admission failure modes in a local RAG system.
+### 2. RAG Retrieval Trade-offs — retrieval quality, latency & context
 
-The project uses a controlled reference setup to evaluate how retrieval, context-construction, and runtime variables interact and how to select a rational operating point for a defined product and operating context.
+**Question.** How do retrieval and context-assembly choices affect evidence completeness, citations, response time, and context budget?
 
-The objective is not to propose universal RAG settings, but to demonstrate a repeatable approach to architecture evaluation and evidence-based decision-making.
+- **Evaluation:** 4 hypotheses, 14 evaluation cases, 55 annotated facts, and **956 run records** (including warm-ups); these are **not** 956 independent cases.
+- **Measurements:** retrieval coverage, citation behavior, input tokens, time to first token (TTFT), end-to-end latency, and context-admission failures.
+- **Decision:** retrieval unit, chunk size, `top_k`, and context-admission policy must be selected for the specific corpus, model, and product requirements rather than treated as universal defaults.
+- **Reference stack:** Python 3.12, Ollama, Chroma, `qwen3-embedding:0.6b`, and `mistral:7b`.
 
-The evaluation system includes frozen inputs, structured records, schemas, validators, deterministic context assembly, integrity checks, retained raw results, and a recorded reference environment with pinned Python dependencies.
+**Evidence:** [Repository](https://github.com/Anton-Trofimov/rag-retrieval-tradeoffs) · [Results and decisions](https://github.com/Anton-Trofimov/rag-retrieval-tradeoffs/blob/main/RESULTS-AND-DECISIONS.md)
 
-#### Key findings
+### 3. AI Systems Integration — Document Workflows & Agent Tooling
 
-The measured evaluation showed that RAG configuration should be assessed as a system of interacting variables rather than optimized through isolated parameters. Corpus structure, retrieval unit, chunking, `top_k`, context-admission policy, model behavior, latency, and product requirements must be evaluated together.
+Assessment of open-source components and their **enterprise adoption requirements**: integration, data lifecycle, access boundaries, resource needs, and operational controls.
 
-The project demonstrates a repeatable approach: define bounded hypotheses and evaluation cases, measure evidence and operating trade-offs, analyze failure modes, and make configuration-specific product and architecture decisions. Concrete results for the evaluated setup are documented in [Results and Decisions](https://github.com/Anton-Trofimov/rag-retrieval-tradeoffs/blob/main/RESULTS-AND-DECISIONS.md).
+- **Document workflows — Open WebUI + Ollama:** deployed a containerized service with persistent storage and a backup procedure; verified document ingestion, indexing, retrieval with source references, and a one-time document sync through `oikb`. Investigated a case where answer correctness concealed a Top-5 retrieval coverage gap. Distinguished source-of-truth documents from indexed and generated copies.
+- **Agent platforms — OpenClaw + GigaAgent:** configured persistent context, memory conventions, subagent delegation, and a user channel; exercised local model inference, HITL, bounded Docker execution, and agent continuation. Reviewed permission and trust boundaries.
+- **Tooling and memory — MCP + Mem0 + Qdrant:** validated a custom MCP server's tool discovery and result flow and cross-chat retrieval of persistent memory. Examined integration and resource constraints.
+- **Next assessment criteria:** concurrent workloads, latency and capacity under load, CPU/GPU memory budgets, update/delete propagation, document-level access enforcement, multi-user isolation, restore, and scaling architecture. **Load testing, enterprise ACL enforcement, and scale-out are not yet validated.**
 
-### 1.2. Governed Agent Runtime
+## Publications
 
-**Status:** Public baseline published / ongoing validation<br>
+1. [**От предложений LLM к управляемому исполнению: опыт разработки AI-агента**](https://habr.com/p/1105178/) — agent execution boundaries, multi-step control, evaluation findings, and SDD.
+2. [**Зачем GenAI-ассистенту platform logic: как управлять источниками, evidence и ответами**](https://habr.com/p/1050848/) — evidence sufficiency, policy gates, answer control, and fallback outside the model.
+3. [**Почему RAG — это не просто «добавить поиск»: latency, качество и выбор стратегии retrieval**](https://habr.com/p/1040938/) — retrieval trade-offs, evaluation, and product-level configuration decisions.
 
-**Repository:** [governed-agent-runtime](https://github.com/Anton-Trofimov/governed-agent-runtime)<br>
+## Links
 
-**Results and decisions:** [RESULTS-AND-DECISIONS.md](https://github.com/Anton-Trofimov/governed-agent-runtime/blob/main/RESULTS-AND-DECISIONS.md)<br>
-
-#### Summary
-
-A bounded agentic system for on-call incident-response scenarios in which the LLM interprets evidence and proposes the next step, while a deterministic runtime remains the operational control plane for policy, authorization, tools, confirmation, state transitions, and execution.
-
-The project is developed through an SDD development harness that connects product hypotheses and human decisions to specifications, contracts, bounded AI-assisted implementation, tests, reproducible evaluation, published evidence, semantic review, and project-level decisions.
-
-The project explores where bounded agent behavior provides useful autonomy compared with deterministic workflows while keeping operational authority, evaluation, and failure handling explicit.
-
-The current public baseline includes a deterministic governed runtime path and Exp 18.1A: five single-step operational scenarios evaluated with Qwen `qwen3.8:27b` across 15 measured attempts.
-
-- **Model quality:** `12 / 15 PASS`
-- **Runtime control (containment):** `15 / 15 PASS`
-
-The evaluation exposed an important boundary: schema-valid and runtime-contained model output can still contain unsupported semantic details. This led to separate evaluation of model quality and runtime containment rather than treating agent behavior as a single PASS / FAIL result.
-
-The published repository already contains the measured baseline, source evidence, evaluation artifacts, and resulting project decisions. Subsequent stages extend the validation toward bounded multi-step behavior, controlled tool interaction, failure handling, latency and token economics, model comparison, and measurable user and business outcomes.
-
-## Universal Agent Platforms
-
-Hands-on exploration of universal-agent runtime patterns using **OpenClaw** and **GigaAgent**, complementing the custom runtime work in Governed Agent Runtime.
-
-- **OpenClaw:** configured and adapted an agent workspace with persistent user context and memory conventions, specialized subagents, routing/delegation, Telegram as a user channel, and explicit allowlists and trust boundaries.
-- **GigaAgent 0.1.9:** ran a local stack with Ollama (`qwen3.8:27b`, `qwen3-embedding:0.6b`) and exercised the execution path from model proposal through HITL and runtime control to a resource-bounded Docker sandbox and agent continuation.
-- Extended the capability surface through a minimal custom **MCP server**, validating tool discovery/schema, model tool selection, MCP execution, and result propagation back into the agent workflow.
-- Tested platform-managed persistent memory through **Mem0 + Qdrant**, including automatic background fact extraction, embedding, semantic retrieval, and cross-chat memory injection.
-- Investigated practical runtime and integration failure modes across sandbox lifecycle, MCP transport/CORS, realtime UI streaming, OpenAI-compatible embedding APIs, and local GPU resource pressure.
-
-## 2. Publications
-
-### 2.1. Why RAG Is More Than “Adding Search”
-
-**Article:** [Why RAG Is More Than “Adding Search”](https://habr.com/p/1040938/)
-
-#### Summary
-
-An analysis of how retrieval strategy, evidence completeness, context budget, and latency affect practical RAG architecture decisions.
-
-The article connects experimental results with product and architecture questions: when RAG is justified, why larger `top_k` is not automatically better, how chunking and retrieval units affect evidence, and why local findings should not be presented as universal settings.
-
-### 2.2. Governed GenAI Pipeline
-
-**Article:** [Governed GenAI Pipeline](https://habr.com/p/1050848/)
-
-#### Summary
-
-An architecture study of separating probabilistic model proposals from deterministic evidence checks, policy gates, answer-mode control, fallback, and runtime decisions.
-
-The central conclusion is that the language model can operate inside a bounded proposal layer, while evidence sufficiency, policy enforcement, allowed outcomes, and fallback remain runtime responsibilities.
-
-## 3. Links
-
-**GitHub:** [Anton-Trofimov](https://github.com/Anton-Trofimov)<br>
-**Habr:** [Anton Trofimov — articles](https://habr.com/ru/users/Anton_Trofimov/articles/)<br>
-**LinkedIn:** [Anton Trofimov](https://www.linkedin.com/in/ai-trofimov)
+[Personal site](https://антонтрофимов.рф/) · [GitHub](https://github.com/Anton-Trofimov) · [Habr](https://habr.com/ru/users/Anton_Trofimov/articles/) · [LinkedIn](https://www.linkedin.com/in/ai-trofimov)
